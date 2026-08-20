@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: #070b11;
+  --color-ink-900: #0b1017;
+  --color-ink-850: #0e141d;
+  --color-ink-800: #111927;
+  --color-ink-700: #1a2434;
+  --color-ink-600: #233247;
+  --color-line: #1d2a3b;
+  --color-line-soft: #16202e;
+  --color-fog: #e8eef5;
+  --color-dim: #92a5ba;
+  --color-faint: #5d7288;
+  --color-gold-300: #f3d08a;
+  --color-gold-400: #eebf62;
+  --color-gold-500: #e9b44c;
+  --color-gold-600: #c9963a;
+  --color-up-300: #7fe6c3;
+  --color-up-400: #45d8a8;
+  --color-up-500: #2ec99a;
+  --color-up-600: #1fa37c;
+  --color-down-300: #f79aa1;
+  --color-down-400: #f0616d;
+  --color-down-500: #e14b58;
+  --color-cy-400: #62b6de;
+  --color-cy-500: #3f9cc9;
+
+  --font-display: "Space Grotesk", "Noto Sans JP", sans-serif;
+  --font-mono: "IBM Plex Mono", "Noto Sans JP", monospace;
+  --font-body: "Noto Sans JP", "Space Grotesk", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: var(--color-fog);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(233, 180, 76, 0.32);
+  color: #fff;
+}
+
+/* ---------- ambient layered background ---------- */
+.bg-stage {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(1100px 520px at 82% -8%, rgba(233, 180, 76, 0.09), transparent 62%),
+    radial-gradient(900px 560px at -10% 32%, rgba(46, 201, 154, 0.07), transparent 60%),
+    radial-gradient(760px 480px at 55% 112%, rgba(63, 156, 201, 0.08), transparent 62%),
+    var(--color-ink-950);
+}
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(146, 165, 186, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(146, 165, 186, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(1200px 900px at 50% 0%, #000 30%, transparent 92%);
+}
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.028 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-scan {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: -30%;
+  height: 34%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(233, 180, 76, 0.045), transparent);
+  animation: scan 11s linear infinite;
+}
+@keyframes scan {
+  0% { transform: translateY(-20%); }
+  100% { transform: translateY(460%); }
+}
+
+/* ---------- ticker tape ---------- */
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 46s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- reveal on scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- pulse dot ---------- */
+.pulse-dot { position: relative; }
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(46, 201, 154, 0.7);
+  animation: ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes ping {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  80%, 100% { transform: scale(2.1); opacity: 0; }
+}
+
+.chart-in { animation: chart-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes chart-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chart-end-dot { animation: blink 2s ease-in-out infinite; }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ---------- panel corner brackets ---------- */
+.corner-frame { position: relative; }
+.corner-frame::before,
+.corner-frame::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}
+.corner-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--color-gold-500);
+  border-left: 2px solid var(--color-gold-500);
+}
+.corner-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--color-gold-500);
+  border-right: 2px solid var(--color-gold-500);
+}
+
+.panel {
+  background: linear-gradient(180deg, rgba(23, 32, 47, 0.72), rgba(14, 20, 29, 0.9));
+  border: 1px solid var(--color-line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.035) inset, 0 14px 40px rgba(3, 6, 10, 0.45);
+}
+.panel-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s, box-shadow 0.35s;
+}
+.panel-hover:hover {
+  transform: translateY(-3px);
+  border-color: rgba(233, 180, 76, 0.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 18px 44px rgba(3, 6, 10, 0.55);
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* thin scrollbar for log table */
+.scroll-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--color-ink-600); border-radius: 8px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ticker-track, .bg-scan, .pulse-dot::after, .chart-end-dot { animation: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .panel-hover, .panel-hover:hover { transition: none; transform: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}
