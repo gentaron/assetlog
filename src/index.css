@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  --color-ink-50: #f2f6fb;
+  --color-ink-100: #e8eef5;
+  --color-ink-200: #c9d4e0;
   --color-ink-950: #070b11;
   --color-ink-900: #0b1017;
   --color-ink-850: #0e141d;
@@ -111,6 +114,22 @@ body {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
+}
+
+/* ゲージ針のスウィープ */
+.gauge-needle {
+  transform-origin: 100px 96px;
+  animation: needleSweep 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes needleSweep {
+  from {
+    transform: rotate(var(--sweep, -160deg));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gauge-needle {
+    animation: none;
+  }
 }
 
 .reveal {
