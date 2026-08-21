@@ -82,8 +82,8 @@ function stdev(xs: number[]): number {
   return Math.sqrt(xs.reduce((a, b) => a + (b - m) * (b - m), 0) / (xs.length - 1));
 }
 
-export function computeMetrics(): Metrics {
-  const { records, totalRows, naRows } = parseLog();
+export function computeMetrics(parsed: ParsedLog = parseLog()): Metrics {
+  const { records, totalRows, naRows } = parsed;
   const start = records[0];
   const latest = records[records.length - 1];
   const startValue = start.v;
