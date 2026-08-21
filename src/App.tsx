@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { MainChart } from "./components/charts";
+import { PortfolioSection } from "./components/portfolio";
 import { Header, Hero, KpiGrid, RiskSection, SectionHead, Ticker } from "./components/sections";
 import { Footer, LogTable, Milestones, MonthlySection } from "./components/sections2";
+import { MonteCarloSection, RiskLab, TearSheet } from "./components/tearsheet";
 import { useReveal } from "./lib/hooks";
 import { computeMetrics } from "./lib/metrics";
 
@@ -68,9 +70,49 @@ export default function App() {
           <RiskSection m={m} />
         </section>
 
-        <section id="milestones" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
+        <section id="portfolio" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
           <SectionHead
             no="04"
+            en="PORTFOLIO"
+            jp="ポートフォリオ構成"
+            desc="総資産 $65,188.27 ・ 90 銘柄超。テーマ別アロケーション、集中度（HHI/実効保有数）、カテゴリ構成、全保有の一覧。"
+          />
+          <PortfolioSection />
+        </section>
+
+        <section id="quant" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
+          <SectionHead
+            no="05"
+            en="QUANT TEAR SHEET"
+            jp="クオンツ・ティアシート"
+            desc="プロ機関級の全指標バッチ。リターン・リスク・リスク調整後効率・トレード統計の 32 指標＋月次ヒートマップ＋年次リターン。"
+          />
+          <TearSheet m={m} />
+        </section>
+
+        <section id="risklab" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
+          <SectionHead
+            no="06"
+            en="RISK LAB"
+            jp="リスクラボ"
+            desc="ローリング・シャープレシオとボラティリティの時系列、日次リターン分布（正規分布フィット）、主要ドローダウン・エピソード。"
+          />
+          <RiskLab m={m} />
+        </section>
+
+        <section id="forecast" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
+          <SectionHead
+            no="07"
+            en="MONTE CARLO FORECAST"
+            jp="モンテカルロ将来シミュレーション"
+            desc="観測リターン分布から 2,000 本の 1 年パスを生成。パーセンタイル帯とテール確率で将来のバラつきを可視化。"
+          />
+          <MonteCarloSection m={m} />
+        </section>
+
+        <section id="milestones" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
+          <SectionHead
+            no="08"
             en="MILESTONES"
             jp="マイルストーンと到達予測"
             desc="$5k刻みの資産水準をいつ突破したか、そのペースと、次の目標の到達予測日。"
@@ -80,7 +122,7 @@ export default function App() {
 
         <section id="monthly" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
           <SectionHead
-            no="05"
+            no="09"
             en="MONTHLY REPORT"
             jp="月次レポート"
             desc="毎月の月末資産・月間損益・開始来の累積リターンを一覧化。ベスト月とワースト月もハイライト。"
@@ -90,7 +132,7 @@ export default function App() {
 
         <section id="log" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
           <SectionHead
-            no="06"
+            no="10"
             en="RAW LOG"
             jp="生ログ"
             desc="直近に収集されたスナップショットを原文のまま掲載。ソースシートへのリンクも。"

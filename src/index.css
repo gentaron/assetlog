@@ -107,6 +107,12 @@ body {
 }
 
 /* ---------- reveal on scroll ---------- */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(22px);
