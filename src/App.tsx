@@ -1,11 +1,49 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MainChart } from "./components/charts";
 import { PortfolioSection } from "./components/portfolio";
 import { Header, Hero, KpiGrid, RiskSection, SectionHead, Ticker } from "./components/sections";
 import { Footer, LogTable, Milestones, MonthlySection } from "./components/sections2";
+import { TerminalView } from "./components/terminal";
 import { MonteCarloSection, RiskLab, TearSheet } from "./components/tearsheet";
 import { useReveal } from "./lib/hooks";
 import { computeMetrics } from "./lib/metrics";
+
+type Tab = "ledger" | "terminal";
+
+function TabBar({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
+  const tabs: { id: Tab; label: string; sub: string }[] = [
+    { id: "ledger", label: "ASSET LEDGER", sub: "資産形成ログ" },
+    { id: "terminal", label: "QUANT TERMINAL", sub: "分析ターミナル" },
+  ];
+  return (
+    <div className="sticky top-0 z-50 border-b border-line bg-ink-950/92 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-[1240px] items-stretch gap-1 px-4 md:px-6">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            aria-pressed={tab === t.id}
+            className={`relative min-h-[52px] flex-1 px-3 text-left transition-colors duration-300 sm:flex-none sm:px-6 ${
+              tab === t.id ? "text-ink-50" : "text-dim hover:text-ink-100"
+            }`}
+          >
+            <span className="block font-display text-[13px] font-bold tracking-[0.14em] sm:text-sm">{t.label}</span>
+            <span className="block font-mono text-[10px] tracking-[0.2em] text-faint">{t.sub}</span>
+            <span
+              className={`absolute inset-x-2 bottom-0 h-[2px] origin-left rounded-t transition-all duration-300 sm:inset-x-4 ${
+                tab === t.id ? "scale-x-100 bg-gold-400" : "scale-x-0 bg-transparent"
+              }`}
+            />
+          </button>
+        ))}
+        <div className="ml-auto hidden items-center gap-2 self-center border border-up-600/40 bg-up-500/10 px-3 py-1 md:flex">
+          <span className="pulse-dot h-2 w-2 rounded-full bg-up-400" />
+          <span className="font-mono text-[10px] tracking-[0.18em] text-up-300">LIVE LOG</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ChartSection({ m }: { m: ReturnType<typeof computeMetrics> }) {
   const ref = useReveal<HTMLDivElement>();
@@ -25,6 +63,7 @@ function ChartSection({ m }: { m: ReturnType<typeof computeMetrics> }) {
 
 export default function App() {
   const m = useMemo(() => computeMetrics(), []);
+  const [tab, setTab] = useState<Tab>("ledger");
 
   return (
     <div className="relative min-h-screen">
@@ -35,10 +74,14 @@ export default function App() {
       <div className="bg-scan" aria-hidden />
 
       <Ticker m={m} />
-      <Header m={m} />
+      <TabBar tab={tab} setTab={setTab} />
 
-      <main>
-        <Hero m={m} />
+      {tab === "ledger" && (
+        <>
+          <Header m={m} />
+
+          <main>
+            <Hero m={m} />
 
         <section id="chart" className="mx-auto max-w-[1240px] scroll-mt-24 px-4 py-10 md:px-6">
           <SectionHead
@@ -139,7 +182,15 @@ export default function App() {
           />
           <LogTable m={m} />
         </section>
-      </main>
+          </main>
+        </>
+      )}
+
+      {tab === "terminal" && (
+        <main>
+          <TerminalView m={m} />
+        </main>
+      )}
 
       <Footer m={m} />
     </div>

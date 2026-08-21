@@ -82,7 +82,7 @@ const NAV = [
 
 export function Header({ m }: { m: Metrics }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-line-soft bg-ink-950/85 backdrop-blur-md">
+    <header className="relative z-30 border-b border-line-soft bg-ink-950/85">
       <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-3 md:px-6">
         <a href="#overview" className="group flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center border border-gold-500/70 font-display text-sm font-bold text-gold-400 transition-shadow duration-300 group-hover:shadow-[0_0_16px_rgba(233,180,76,0.35)]">
