@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { MainChart } from "./components/charts";
 import { PortfolioSection } from "./components/portfolio";
+import { PureTab } from "./components/pureTab";
 import { Header, Hero, KpiGrid, RiskSection, SectionHead, Ticker } from "./components/sections";
 import { Footer, LogTable, Milestones, MonthlySection } from "./components/sections2";
 import { TerminalView } from "./components/terminal";
@@ -8,12 +9,13 @@ import { MonteCarloSection, RiskLab, TearSheet } from "./components/tearsheet";
 import { useReveal } from "./lib/hooks";
 import { computeMetrics } from "./lib/metrics";
 
-type Tab = "ledger" | "terminal";
+type Tab = "ledger" | "terminal" | "pure";
 
 function TabBar({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const tabs: { id: Tab; label: string; sub: string }[] = [
     { id: "ledger", label: "ASSET LEDGER", sub: "資産形成ログ" },
     { id: "terminal", label: "QUANT TERMINAL", sub: "分析ターミナル" },
+    { id: "pure", label: "PURE RETURN", sub: "純投資評価" },
   ];
   return (
     <div className="sticky top-0 z-50 border-b border-line bg-ink-950/92 backdrop-blur-sm">
@@ -189,6 +191,12 @@ export default function App() {
       {tab === "terminal" && (
         <main>
           <TerminalView m={m} />
+        </main>
+      )}
+
+      {tab === "pure" && (
+        <main>
+          <PureTab m={m} />
         </main>
       )}
 
