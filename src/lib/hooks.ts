@@ -13,7 +13,6 @@ export function usePrefersReducedMotion(): boolean {
   return prm;
 }
 
-/** 数値をイージングでカウントアップ（reduced-motion 時は即座に最終値） */
 export function useCountUp(target: number, duration = 1400, decimals = 2): string {
   const prm = usePrefersReducedMotion();
   const [val, setVal] = useState(prm ? target : 0);
@@ -45,7 +44,6 @@ export function useCountUp(target: number, duration = 1400, decimals = 2): strin
   );
 }
 
-/** スクロールリビール: 要素が視界に入ったら is-in を付与 */
 export function useReveal<T extends HTMLElement>(threshold = 0.12) {
   const ref = useRef<T | null>(null);
   useEffect(() => {

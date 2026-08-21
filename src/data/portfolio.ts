@@ -1,198 +1,103 @@
-export type SrcCat = "ファンド" | "ETF" | "法定通貨" | "暗号通貨" | "ゴールド" | "オルタナ";
-
+/** Index2「assets」シート由来のポートフォリオ（ALL 行は総額として扱う） */
 export interface Holding {
   name: string;
-  cat: SrcCat;
-  theme: string;
-  usd: number;
-  pct: number;
+  value: number; // USD
+  pct: number; // シート記載の保有率 %
 }
 
-export const PORT_TOTAL = 65188.27039;
-export const PORT_ALL_PCT_SRC = "76.42%";
+export type Category = "ファンド" | "ETF" | "法定通貨" | "暗号通貨" | "ゴールド" | "オルタナ";
 
-export const THEME_COLORS: Record<string, string> = {
-  "全世界株": "#4ade9c",
-  "米国株": "#5ca9ff",
-  "日本株": "#ff6b6b",
-  "インド株": "#ffa94d",
-  "中国株": "#c792ea",
-  "新興国株": "#a8d84c",
-  "欧州株": "#4dd8e6",
-  "セクター・テーマ": "#f78fb3",
-  "ゴールド・貴金属": "#ffd76a",
-  "コモディティ": "#d4a276",
-  "債券・短期国債": "#93a7b8",
-  "デジタル資産": "#9d6bff",
-  "法定通貨": "#cfe0ee",
-  "オルタナ": "#6b7f8c",
-};
-
-export const CAT_COLORS: Record<SrcCat, string> = {
-  ファンド: "#4ade9c",
-  ETF: "#5ca9ff",
-  法定通貨: "#cfe0ee",
-  暗号通貨: "#9d6bff",
-  ゴールド: "#ffd76a",
-  オルタナ: "#6b7f8c",
-};
-
-const h = (name: string, cat: SrcCat, theme: string, usd: number, pct: number): Holding => ({ name, cat, theme, usd, pct });
+export const PORTFOLIO_TOTAL = 65188.27039;
 
 export const HOLDINGS: Holding[] = [
-  // ファンド
-  h("eMAXIS Slim 全世界株式(オール･カントリー)", "ファンド", "全世界株", 5623.37051, 8.63),
-  h("SBI・iシェアーズ・ゴールド(H無)", "ファンド", "ゴールド・貴金属", 2336.24993, 3.58),
-  h("SBI・新興国株式インデックス・ファンド", "ファンド", "新興国株", 2099.481655, 3.22),
-  h("eMAXIS プラス コモディティインデックス", "ファンド", "コモディティ", 2002.670948, 3.07),
-  h("SBI・iシェアーズ・日経225インデックス・ファンド", "ファンド", "日本株", 1251.990928, 1.92),
-  h("フィデリティ･米国優良株･ファンド", "ファンド", "米国株", 490.7231979, 0.75),
-  h("SBI・iシェアーズ・インド株式インデックス・F", "ファンド", "インド株", 381.1324689, 0.58),
-  // ETF（カテゴリ明記）
-  h("VOO", "ETF", "米国株", 4907.07, 7.53),
-  h("EWJ", "ETF", "日本株", 3487.99, 5.35),
-  h("OUNZ", "ETF", "ゴールド・貴金属", 2154.735, 3.31),
-  h("GLDM", "ETF", "ゴールド・貴金属", 1881.39, 2.89),
-  h("TLT", "ETF", "債券・短期国債", 858.8062, 1.32),
-  h("CNYA", "ETF", "中国株", 437.28, 0.67),
-  h("VEGI", "ETF", "セクター・テーマ", 319.9, 0.49),
-  h("ETHA", "ETF", "デジタル資産", 140.4, 0.22),
-  h("PHO", "ETF", "米国株", 143.3, 0.22),
-  h("IBIT", "ETF", "デジタル資産", 123.6, 0.19),
-  h("TIP", "ETF", "債券・短期国債", 107.52, 0.16),
-  h("IYR", "ETF", "セクター・テーマ", 104.78, 0.16),
-  h("IEV", "ETF", "欧州株", 75.34, 0.12),
-  h("VTI", "ETF", "米国株", 64.056258, 0.1),
-  h("PFFD", "ETF", "セクター・テーマ", 55.26, 0.08),
-  h("BTBT", "ETF", "デジタル資産", 3.2, 0.0),
-  h("XBI", "ETF", "セクター・テーマ", 0, 0),
-  h("IYH", "ETF", "セクター・テーマ", 0, 0),
-  h("B", "ETF", "米国株", 0, 0),
-  h("GBTC", "ETF", "デジタル資産", 0, 0),
-  // 末尾グループ（出典ではカテゴリ空欄→再分類）
-  h("VWRA", "ETF", "全世界株", 9268.32, 14.22),
-  h("SGOV", "ETF", "債券・短期国債", 4023.6, 6.17),
-  h("GLD", "ETF", "ゴールド・貴金属", 2076.3, 3.19),
-  h("SBI貴金属（ゴールド）", "ゴールド", "ゴールド・貴金属", 383.5139307, 0.59),
-  h("QQQ", "ETF", "米国株", 0, 0),
-  h("Space X", "オルタナ", "オルタナ", 0, 0),
-  // 法定通貨
-  h("MYR（法定通貨）", "法定通貨", "法定通貨", 7592.614549, 11.65),
-  h("USD（法定通貨）", "法定通貨", "法定通貨", 3463.87, 5.31),
-  h("JPY（法定通貨）", "法定通貨", "法定通貨", 1758.12036, 2.7),
-  h("SGD（法定通貨）", "法定通貨", "法定通貨", 1524.687847, 2.34),
-  h("HKD（法定通貨）", "法定通貨", "法定通貨", 285.3246616, 0.44),
-  h("AUD（法定通貨）", "法定通貨", "法定通貨", 150.7464438, 0.23),
-  h("IDR（法定通貨）", "法定通貨", "法定通貨", 51.77464792, 0.08),
-  h("THB（法定通貨）", "法定通貨", "法定通貨", 22.91909112, 0.04),
-  h("EUR（法定通貨）", "法定通貨", "法定通貨", 0, 0),
-  h("NZD（法定通貨）", "法定通貨", "法定通貨", 0, 0),
-  h("CAD（法定通貨）", "法定通貨", "法定通貨", 0, 0),
-  h("CHF（法定通貨）", "法定通貨", "法定通貨", 0, 0),
-  h("GBP（法定通貨）", "法定通貨", "法定通貨", 0, 0),
-  // 暗号通貨
-  h("BTC（暗号通貨）", "暗号通貨", "デジタル資産", 1427.745053, 2.19),
-  h("ETH（暗号通貨）", "暗号通貨", "デジタル資産", 1069.93048, 1.64),
-  h("USDC（暗号通貨）", "暗号通貨", "デジタル資産", 1050.17245, 1.61),
-  h("WBTC（暗号通貨）", "暗号通貨", "デジタル資産", 904.7240647, 1.39),
-  h("SOL（暗号通貨）", "暗号通貨", "デジタル資産", 246.100697, 0.38),
-  h("WLD（暗号通貨）", "暗号通貨", "デジタル資産", 215.712504, 0.33),
-  h("USDT（暗号通貨）", "暗号通貨", "デジタル資産", 116.1065499, 0.18),
-  h("EURC（暗号通貨）", "暗号通貨", "デジタル資産", 99.365526, 0.15),
-  h("WETH（暗号通貨）", "暗号通貨", "デジタル資産", 87.3663686, 0.13),
-  h("ADA（暗号通貨）", "暗号通貨", "デジタル資産", 84.88566986, 0.13),
-  h("MATIC（暗号通貨）", "暗号通貨", "デジタル資産", 68.88839748, 0.11),
-  h("AVAX（暗号通貨）", "暗号通貨", "デジタル資産", 33.960705, 0.05),
-  h("DOGE（暗号通貨）", "暗号通貨", "デジタル資産", 26.78162027, 0.04),
-  h("LINK（暗号通貨）", "暗号通貨", "デジタル資産", 21.40819837, 0.03),
-  h("BNB（暗号通貨）", "暗号通貨", "デジタル資産", 20.30847819, 0.03),
-  h("GBP（暗号通貨）", "暗号通貨", "デジタル資産", 14.122493, 0.02),
-  h("AUDIO（暗号通貨）", "暗号通貨", "デジタル資産", 13.5700851, 0.02),
-  h("ALGO（暗号通貨）", "暗号通貨", "デジタル資産", 13.48264402, 0.02),
-  h("QRL（暗号通貨）", "暗号通貨", "デジタル資産", 11.8556208, 0.02),
-  h("MNT（暗号通貨）", "暗号通貨", "デジタル資産", 5.965547217, 0.01),
-  h("SHIB（暗号通貨）", "暗号通貨", "デジタル資産", 3.279571553, 0.01),
-  h("NIBI（暗号通貨）", "暗号通貨", "デジタル資産", 0.4990402812, 0),
-  h("GALA（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("BTG（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("XAUT（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("ATOM（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("ARB（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("STORJ（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("APE（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("BGB（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("PAXG（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("XLM（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("NEAR（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("DOT（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("SUI（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("WMATIC（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("JPY（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("BRL（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
-  h("MYR（暗号通貨）", "暗号通貨", "デジタル資産", 0, 0),
+  { name: "VWRA", value: 9268.32, pct: 14.22 },
+  { name: "MYR（法定通貨）", value: 7592.614549, pct: 11.65 },
+  { name: "eMAXIS Slim全世界株式(オール･カントリー)", value: 5623.37051, pct: 8.63 },
+  { name: "VOO", value: 4907.07, pct: 7.53 },
+  { name: "SGOV", value: 4023.6, pct: 6.17 },
+  { name: "USD（法定通貨）", value: 3463.87, pct: 5.31 },
+  { name: "EWJ", value: 3487.99, pct: 5.35 },
+  { name: "eMAXIS プラス コモディティインデックス", value: 2002.670948, pct: 3.07 },
+  { name: "SBI・iシェアーズ・ゴールド(H無)", value: 2336.24993, pct: 3.58 },
+  { name: "SBI・新興国株式インデックス・ファンド", value: 2099.481655, pct: 3.22 },
+  { name: "OUNZ", value: 2154.735, pct: 3.31 },
+  { name: "GLD", value: 2076.3, pct: 3.19 },
+  { name: "GLDM", value: 1881.39, pct: 2.89 },
+  { name: "JPY（法定通貨）", value: 1758.12036, pct: 2.7 },
+  { name: "SGD（法定通貨）", value: 1524.687847, pct: 2.34 },
+  { name: "BTC（暗号通貨）", value: 1427.745053, pct: 2.19 },
+  { name: "SBI・iシェアーズ・日経225インデックス・ファンド", value: 1251.990928, pct: 1.92 },
+  { name: "ETH（暗号通貨）", value: 1069.93048, pct: 1.64 },
+  { name: "USDC（暗号通貨）", value: 1050.17245, pct: 1.61 },
+  { name: "WBTC（暗号通貨）", value: 904.7240647, pct: 1.39 },
+  { name: "TLT", value: 858.8062, pct: 1.32 },
+  { name: "フィデリティ･米国優良株･ファンド", value: 490.7231979, pct: 0.75 },
+  { name: "CNYA", value: 437.28, pct: 0.67 },
+  { name: "SBI・iシェアーズ・インド株式インデックス・F", value: 381.1324689, pct: 0.58 },
+  { name: "SBI貴金属（ゴールド）", value: 383.5139307, pct: 0.59 },
+  { name: "VEGI", value: 319.9, pct: 0.49 },
+  { name: "HKD（法定通貨）", value: 285.3246616, pct: 0.44 },
+  { name: "SOL（暗号通貨）", value: 246.100697, pct: 0.38 },
+  { name: "WLD（暗号通貨）", value: 215.712504, pct: 0.33 },
+  { name: "AUD（法定通貨）", value: 150.7464438, pct: 0.23 },
+  { name: "PHO", value: 143.3, pct: 0.22 },
+  { name: "ETHA", value: 140.4, pct: 0.22 },
+  { name: "IBIT", value: 123.6, pct: 0.19 },
+  { name: "USDT（暗号通貨）", value: 116.1065499, pct: 0.18 },
+  { name: "TIP", value: 107.52, pct: 0.16 },
+  { name: "IYR", value: 104.78, pct: 0.16 },
+  { name: "EURC（暗号通貨）", value: 99.365526, pct: 0.15 },
+  { name: "WETH（暗号通貨）", value: 87.3663686, pct: 0.13 },
+  { name: "ADA（暗号通貨）", value: 84.88566986, pct: 0.13 },
+  { name: "IEV", value: 75.34, pct: 0.12 },
+  { name: "MATIC（暗号通貨）", value: 68.88839748, pct: 0.11 },
+  { name: "VTI", value: 64.056258, pct: 0.1 },
+  { name: "PFFD", value: 55.26, pct: 0.08 },
+  { name: "AVAX（暗号通貨）", value: 33.960705, pct: 0.05 },
+  { name: "DOGE（暗号通貨）", value: 26.78162027, pct: 0.04 },
+  { name: "THB（法定通貨）", value: 22.91909112, pct: 0.04 },
+  { name: "LINK（暗号通貨）", value: 21.40819837, pct: 0.03 },
+  { name: "BNB（暗号通貨）", value: 20.30847819, pct: 0.03 },
+  { name: "GBP（暗号通貨）", value: 14.122493, pct: 0.02 },
+  { name: "AUDIO（暗号通貨）", value: 13.5700851, pct: 0.02 },
+  { name: "ALGO（暗号通貨）", value: 13.48264402, pct: 0.02 },
+  { name: "QRL（暗号通貨）", value: 11.8556208, pct: 0.02 },
+  { name: "MNT（暗号通貨）", value: 5.965547217, pct: 0.01 },
+  { name: "SHIB（暗号通貨）", value: 3.279571553, pct: 0.01 },
+  { name: "NIBI（暗号通貨）", value: 0.4990402812, pct: 0 },
+  { name: "IDR（法定通貨）", value: 51.77464792, pct: 0.08 },
+  { name: "BTBT", value: 3.2, pct: 0 },
 ];
 
-export interface ThemeAgg {
-  theme: string;
-  color: string;
-  usd: number;
-  pct: number;
-  count: number;
+/** 銘柄名 → カテゴリ分類（ETF はテーマで細分化） */
+export function categoryOf(name: string): Category {
+  if (name.includes("法定通貨")) return "法定通貨";
+  if (name.includes("暗号通貨")) return "暗号通貨";
+  if (name.includes("ファンド") || name.includes("eMAXIS")) return "ファンド";
+  if (name === "OUNZ" || name === "GLD" || name === "GLDM" || name.includes("貴金属")) return "ゴールド";
+  if (name === "TLT" || name === "TIP") return "オルタナ";
+  if (name === "BTBT") return "オルタナ";
+  return "ETF";
 }
 
-export function aggregateThemes(): ThemeAgg[] {
-  const map = new Map<string, ThemeAgg>();
-  for (const hd of HOLDINGS) {
-    const cur = map.get(hd.theme) ?? { theme: hd.theme, color: THEME_COLORS[hd.theme] ?? "#888", usd: 0, pct: 0, count: 0 };
-    cur.usd += hd.usd;
-    cur.pct += hd.pct;
-    if (hd.usd > 0) cur.count += 1;
-    map.set(hd.theme, cur);
+/** ETF をテーマで再分類（ドーナツ表示用） */
+export function themeOf(name: string): string {
+  if (name === "VWRA" || name === "VOO" || name === "VTI") return "全世界・米国株";
+  if (name === "EWJ" || name === "CNYA" || name === "IEV") return "地域株";
+  if (name === "VEGI") return "テーマ株";
+  if (name === "SGOV") return "短期債・キャッシュ";
+  if (name === "TLT" || name === "TIP") return "債券";
+  if (name === "OUNZ" || name === "GLD" || name === "GLDM" || name.includes("貴金属") || name.includes("ゴールド")) return "金";
+  if (name === "PHO") return "テーマ株";
+  if (name === "ETHA" || name === "IBIT") return "暗号資産ETF";
+  if (name === "BTBT") return "その他";
+  if (name.includes("暗号通貨")) {
+    if (name.startsWith("BTC") || name.startsWith("WBTC")) return "BTC系";
+    if (name.startsWith("ETH") || name.startsWith("WETH")) return "ETH系";
+    if (name.startsWith("USDT") || name.startsWith("USDC")) return "ステーブルコイン";
+    return "アルトコイン";
   }
-  return [...map.values()].sort((a, b) => b.usd - a.usd);
-}
-
-export interface CatAgg {
-  cat: SrcCat;
-  color: string;
-  usd: number;
-  pct: number;
-}
-
-export function aggregateCats(): CatAgg[] {
-  const map = new Map<SrcCat, CatAgg>();
-  for (const hd of HOLDINGS) {
-    const cur = map.get(hd.cat) ?? { cat: hd.cat, color: CAT_COLORS[hd.cat], usd: 0, pct: 0 };
-    cur.usd += hd.usd;
-    cur.pct += hd.pct;
-    map.set(hd.cat, cur);
-  }
-  return [...map.values()].sort((a, b) => b.usd - a.usd);
-}
-
-export interface Concentration {
-  hhi: number;
-  effectiveN: number;
-  top5: number;
-  top10: number;
-  topName: string;
-  activeCount: number;
-  zeroCount: number;
-}
-
-export function concentration(): Concentration {
-  const act = HOLDINGS.filter((x) => x.usd > 0);
-  const ws = act.map((x) => x.usd / PORT_TOTAL);
-  const hhi = ws.reduce((s, w) => s + w * w, 0);
-  const sorted = [...act].sort((a, b) => b.usd - a.usd);
-  const sumN = (n: number) => sorted.slice(0, n).reduce((s, x) => s + x.usd, 0) / PORT_TOTAL;
-  return {
-    hhi,
-    effectiveN: 1 / hhi,
-    top5: sumN(5),
-    top10: sumN(10),
-    topName: sorted[0]?.name ?? "-",
-    activeCount: act.length,
-    zeroCount: HOLDINGS.length - act.length,
-  };
+  if (name.includes("法定通貨")) return "現金（法定通貨）";
+  if (name.includes("ファンド") || name.includes("eMAXIS")) return "投資信託";
+  return "その他";
 }
