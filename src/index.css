@@ -116,6 +116,48 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* ---------- range slider ---------- */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 40px;
+  background: transparent;
+  cursor: pointer;
+}
+.slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-gold-600), var(--color-ink-600));
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -7px;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: var(--color-gold-400);
+  border: 2px solid var(--color-ink-950);
+  box-shadow: 0 0 0 3px rgba(238, 191, 98, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 5px rgba(238, 191, 98, 0.3);
+}
+.slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-ink-600);
+}
+.slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-gold-400);
+  border: 2px solid var(--color-ink-950);
+}
+
 /* ゲージ針のスウィープ */
 .gauge-needle {
   transform-origin: 100px 96px;
