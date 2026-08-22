@@ -933,11 +933,12 @@ export function parseLog(): ParsedLog {
   const records: LogRecord[] = [];
   let naRows = 0;
   for (const line of lines) {
-    const [ds, vs] = line.split("\t");
-    if (!ds || !vs) continue;
-    const t = Date.parse(ds.replace(" ", "T"));
+    // 行形式: "YYYY/MM/DD H:MM:SS  資産額"（区切りはタブでも空白でも許容）
+    const tk = line.trim().split(/\s+/);
+    if (tk.length < 3 || !/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(tk[0]) || !/^\d{1,2}:\d{2}:\d{2}$/.test(tk[1])) continue;
+    const t = Date.parse(`${tk[0].replace(/\//g, "-")}T${tk[1]}`);
     if (Number.isNaN(t)) continue;
-    const v = parseFloat(vs);
+    const v = parseFloat(tk[2]);
     if (Number.isNaN(v)) {
       naRows++; // #N/A — 欠損は 0 と混ぜない
       continue;

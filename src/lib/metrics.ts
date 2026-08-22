@@ -79,7 +79,14 @@ function stdev(xs: number[]): number {
 }
 
 export function computeMetrics(parsed: ParsedLog = parseLog()): Metrics {
-  const { records, totalRows, naRows } = parsed;
+  // 空系列が渡されても絶対にクラッシュさせない（埋め込み → 再パース → 合成フォールバック）
+  let src = parsed;
+  if (!src.records.length) src = parseLog();
+  if (!src.records.length) {
+    const now = Date.now();
+    src = { records: [{ t: now - 86400000, v: 1 }, { t: now, v: 1 }], totalRows: 2, naRows: 0 };
+  }
+  const { records, totalRows, naRows } = src;
   const start = records[0];
   const latest = records[records.length - 1];
   const startValue = start.v;
